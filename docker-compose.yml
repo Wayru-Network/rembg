@@ -1,13 +1,9 @@
 # docker-compose.yml
-version: "3.8"
+version: "3.3"
 
 services:
   rembg:
-    container_name: rembg
-    image: rembg:latest
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    build: .
     ports:
       - 5000:5000
     
