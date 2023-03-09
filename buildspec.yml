@@ -22,6 +22,7 @@ phases:
             - echo $IMAGE_TAG
             - echo Build started on `date`
             - echo Building the Docker image...
+            - docker-compose --version
             - COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml build rembg
             - docker tag rembg:latest $REPO_URI:$IMAGE_TAG
 
