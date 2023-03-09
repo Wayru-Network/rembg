@@ -15,9 +15,11 @@ phases:
             - REPO_URI=584569398623.dkr.ecr.us-east-2.amazonaws.com/rembg
             - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION)
             - IMAGE_TAG=${COMMIT_HASH:=latest}
+            - echo $IMAGE_TAG
 
     build:
         commands:
+            - echo $IMAGE_TAG
             - echo Build started on `date`
             - echo Building the Docker image...
             - COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml build rembg
