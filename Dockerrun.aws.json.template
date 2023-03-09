@@ -1,0 +1,19 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Ports": [
+    {
+      "ContainerPort": "80"
+    },
+    {
+      "ContainerPort": "443"
+    },
+    {
+      "ContainerPort": "5000"
+    }
+  ],
+  "Image": {
+    "Name": "$REPO_URI:$IMAGE_TAG",
+    "Update": "true"
+  }
+}
+  

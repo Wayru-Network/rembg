@@ -1,0 +1,38 @@
+version: 0.2
+
+phases:
+    install:
+        commands:
+            - pip install --upgrade pip
+            - pip install --upgrade awscli
+
+    pre_build:
+        commands:
+            - yarn
+            - echo Logging in to Amazon ECR...
+            - aws --version
+            - $(aws ecr get-login --no-include-email --region us-east-2)
+            - REPO_URI=584569398623.dkr.ecr.us-east-2.amazonaws.com/rembg
+            - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION)
+            - IMAGE_TAG=${COMMIT_HASH:=latest}
+
+    build:
+        commands:
+            - echo Build started on `date`
+            - echo Building the Docker image...
+            - COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml build web-fixed
+            - docker tag rembg:latest $REPO_URI:$IMAGE_TAG
+
+    post_build:
+        commands:
+            - echo Build completed
+            - echo Pushing the Docker images...
+            - docker push $REPO_URI:$IMAGE_TAG
+            - echo Writing definitions file...
+            - printf '[{"name":"project-container","imageUri":"%s"}]' $REPO_URI:$IMAGE_TAG > taskdefinition.json
+            - ls -a
+            - envsubst < "Dockerrun.aws.json.template" > "Dockerrun.aws.json"
+
+artifacts:
+    files:
+        - "Dockerrun.aws.json"

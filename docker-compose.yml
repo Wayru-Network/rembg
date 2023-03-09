@@ -1,0 +1,15 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  fixed-backend:
+    container_name: rembg
+    image: rembg:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
+      - 443:443
+      - 80:80
+    
